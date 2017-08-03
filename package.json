@@ -1,0 +1,31 @@
+{
+  "name": "reflective-lang-rules",
+  "version": "0.0.1",
+  "description": "Parser and examples for the Reflective Platform Rule Language",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:iteration2/reflective-lang-rules.git"
+  },
+  "keywords": [
+    "reflective",
+    "rules",
+    "language",
+    "parsing"
+  ],
+  "author": "Reflective Systems <code@reflective.dk>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "ast": "git@bitbucket.org:iteration2/reflective-lang-ast.git",
+    "bluebird": "^3.5.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^3.5.0"
+  }
+}
