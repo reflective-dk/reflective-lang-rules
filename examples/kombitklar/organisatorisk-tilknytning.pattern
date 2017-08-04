@@ -1,0 +1,26 @@
+Pattern: Organisatorisk Tilknytning
+
+  Registreringsmønstret "Organisatorisk Tilknytning" beskriver sammenhængen mellem
+  den administrative organisation og de positioner, som eksisterer i Organisationen
+  for at løse den overordnede opgavevaretagelse.
+
+  I SAPA anvendes mønsteret primært til at fremsøge oplysninger om ansatte, som
+  varetager en given position i en Enhed inden for en kommune.
+
+  I KY anvendes mønsteret primært til at fordele sager til medarbejdere i
+  forskellige Enheder.
+
+  En organisatorisk tilknytning forstås som en Funktion af typen "Enhedsrolle".
+  Typen er navngivet således, da den beskriver sammenhængen mellem en eller flere
+  Brugere og en Enhed.
+
+Rule: En organisatorisk tilknytning kan være tilknyttet en eller flere Brugere
+  ad gangen.
+
+  When Funktionstype.Navn equals "Enhedsrolle"
+  Then count TilknyttedeBrugere must be greater than 0
+
+Rule: En organisatorisk tilknytning tilknyttes én og kun én OrganisationEnhed.
+
+  When Funktionstype.Navn equals "Enhedsrolle"
+  Then count TilknyttedeEnheder must equal 1
