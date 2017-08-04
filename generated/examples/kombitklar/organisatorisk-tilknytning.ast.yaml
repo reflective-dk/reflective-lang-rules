@@ -1,0 +1,82 @@
+nodeType: pattern
+title:
+  nodeType: string
+  value: 'Organisatorisk Tilknytning'
+description:
+  -
+    nodeType: string
+    value: 'Registreringsmønstret "Organisatorisk Tilknytning" beskriver sammenhængen mellem den administrative organisation og de positioner, som eksisterer i Organisationen for at løse den overordnede opgavevaretagelse.'
+  -
+    nodeType: string
+    value: 'I SAPA anvendes mønsteret primært til at fremsøge oplysninger om ansatte, som varetager en given position i en Enhed inden for en kommune.'
+  -
+    nodeType: string
+    value: 'I KY anvendes mønsteret primært til at fordele sager til medarbejdere i forskellige Enheder.'
+  -
+    nodeType: string
+    value: 'En organisatorisk tilknytning forstås som en Funktion af typen "Enhedsrolle". Typen er navngivet således, da den beskriver sammenhængen mellem en eller flere Brugere og en Enhed.'
+rules:
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En organisatorisk tilknytning kan være tilknyttet en eller flere Brugere ad gangen.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: Enhedsrolle
+    implication:
+      nodeType: gt
+      left:
+        nodeType: count
+        path:
+          nodeType: path
+          path:
+            - TilknyttedeBrugere
+      right:
+        nodeType: number
+        value: 0
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En organisatorisk tilknytning tilknyttes én og kun én OrganisationEnhed.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: Enhedsrolle
+    implication:
+      nodeType: eq
+      left:
+        nodeType: count
+        path:
+          nodeType: path
+          path:
+            - TilknyttedeEnheder
+      right:
+        nodeType: number
+        value: 1

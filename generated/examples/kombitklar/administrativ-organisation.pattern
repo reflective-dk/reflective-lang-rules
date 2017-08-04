@@ -1,0 +1,32 @@
+Pattern: Administrativ Organisation
+
+  Registreringsmønstret "Administrativ organisation" beskriver, hvorledes
+  den formelle hierarkiske opbygning af en kommunes organisering, også
+  kaldet linjeorganisationen, etableres i STS-Organisation.
+
+  Mønstret "Administrativ Organisation" anvendes primært til at fremsøge
+  organisationshierarkiet for den administrative organisation og indeholder
+  således ikke en registrering af selvejende institutioner og virksomheder,
+  der enten er tilknyttet eller underlagt kommunens forvaltning.
+
+Rule: Enhver Enhed, som deltager i hierarkiet, skal relateres til samme
+  Organisation via relationen Enhed.Tilhoerer.
+
+  When Overordnet exists
+  Then Overordnet.Tilhoerer must equal Tilhoerer
+
+Rule: Der findes én og kun én Enhed, som ikke har en Overordnet relation
+  inden for en Organisation. Denne kaldes for "roden".
+
+  Group by Tilhoerer
+  Given Overordnet does not exist
+  Always size must equal 1
+
+Rule: Hvis en Enhed ikke er "roden" skal Enhed.Overordnet anvendes.
+
+  Bemærk: Denne regel er faktisk en tautologi (altid opfyldt). En Enhed, der ikke
+  har en Overordnet, er iht. definitionen ovenfor en "rod". Dermed vil enhver
+  Enhed, der ikke er "roden", have en Overordnet.
+
+  When Overordnet exists
+  Then Overordnet must exist
