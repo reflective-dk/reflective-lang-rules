@@ -22,7 +22,7 @@ describe('Expression Parsers', function() {
                     ]).serialize())
             ]);
         });
-/*        it('should parse "or" input', function() {
+        it('should parse "or" input', function() {
             return Promise.all([
                 run(parser, 'a or b').should.become(
                     new ast.predicate.OrNode( [
@@ -39,7 +39,7 @@ describe('Expression Parsers', function() {
         it('should parse "a and b or c and d"', function() {
             return Promise.all([
                 run(parser, 'a and b or c and d').should.become(
-                    json(new ast.predicate.OrNode( [
+                    new ast.predicate.OrNode( [
                         new ast.predicate.AndNode([
                             new ast.PathNode('a'),
                             new ast.PathNode('b')
@@ -48,12 +48,12 @@ describe('Expression Parsers', function() {
                             new ast.PathNode('c'),
                             new ast.PathNode('d')
                         ])
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'false or true').should.become(
-                    json(new ast.predicate.OrNode( [
+                    new ast.predicate.OrNode( [
                         new ast.predicate.BooleanNode(false),
                         new ast.predicate.BooleanNode(true)
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should reject invalid input', function() {
@@ -72,44 +72,44 @@ describe('Expression Parsers', function() {
         it('should parse level-2 input', function() {
             return Promise.all([
                 run(parser, 'a equals 2').should.become(
-                    json(new ast.EqNode( [
+                    new ast.predicate.EqNode( [
                         new ast.PathNode('a'),
                         new ast.numeric.NumberNode(2)
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse "and" input', function() {
             return Promise.all([
                 run(parser, 'a and b').should.become(
-                    json(new ast.predicate.AndNode( [
+                    new ast.predicate.AndNode( [
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'false and true').should.become(
-                    json(new ast.predicate.AndNode( [
+                    new ast.predicate.AndNode( [
                         new ast.predicate.BooleanNode(false),
                         new ast.predicate.BooleanNode(true)
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse "a equals b and c equals d"', function() {
             return Promise.all([
                 run(parser, 'a equals b and c equals d').should.become(
-                    json(new ast.predicate.AndNode( [
-                        new ast.EqNode([
+                    new ast.predicate.AndNode( [
+                        new ast.predicate.EqNode([
                             new ast.PathNode('a'),
                             new ast.PathNode('b')
                         ]),
-                        new ast.EqNode([
+                        new ast.predicate.EqNode([
                             new ast.PathNode('c'),
                             new ast.PathNode('d')
                         ])
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'false and true').should.become(
-                    json(new ast.predicate.AndNode( [
+                    new ast.predicate.AndNode( [
                         new ast.predicate.BooleanNode(false),
                         new ast.predicate.BooleanNode(true)
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should reject invalid input', function() {
@@ -133,52 +133,52 @@ describe('Expression Parsers', function() {
         it('should parse level-3 input', function() {
             return Promise.all([
                 run(parser, '2 < 4').should
-                    .become(json(new ast.LtNode( [
+                    .become(new ast.predicate.LtNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.numeric.NumberNode(4)
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse equals input', function() {
             return Promise.all([
                 run(parser, 'a equals 2').should.become(
-                    json(new ast.EqNode( [
+                    new ast.predicate.EqNode( [
                         new ast.PathNode('a'),
                         new ast.numeric.NumberNode(2)
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'a must equal "asd"').should.become(
-                    json(new ast.EqNode( [
+                    new ast.predicate.EqNode( [
                         new ast.PathNode('a'),
                         new ast.StringNode('asd')
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse not equals input', function() {
             return Promise.all([
                 run(parser, 'a does not equal 2').should.become(
-                    json(new ast.predicate.NotNode(new ast.EqNode([
+                    new ast.predicate.NotNode(new ast.predicate.EqNode([
                         new ast.PathNode('a'),
                         new ast.numeric.NumberNode(2)
-                    ])))),
+                    ])).serialize()),
                 run(parser, 'a must not equal "asd"').should.become(
-                    json(new ast.predicate.NotNode(new ast.EqNode([
+                    new ast.predicate.NotNode(new ast.predicate.EqNode([
                         new ast.PathNode('a'),
                         new ast.StringNode('asd')
-                    ]))))
+                    ])).serialize())
             ]);
         });
         it('should parse "a < b equals b > a"', function() {
-            var expected = json(
-                new ast.EqNode([
-                    new ast.LtNode([
+            var expected = 
+                new ast.predicate.EqNode([
+                    new ast.predicate.LtNode([
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
                     ]),
-                    new ast.GtNode([
+                    new ast.predicate.GtNode([
                         new ast.PathNode('b'),
                         new ast.PathNode('a')
                     ])
-                ]));
+                ]).serialize();
             return Promise.all([
                 run(parser, 'a < b equals b > a').should.become(expected)
             ]);
@@ -204,85 +204,86 @@ describe('Expression Parsers', function() {
         it('should parse level-4 input', function() {
             return Promise.all([
                 run(parser, 'not false').should
-                    .become(json(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))))
+                    .become(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))
+                            .serialize())
             ]);
         });
         it('should parse 2 < 4', function() {
             return Promise.all([
                 run(parser, '2 < 4').should
-                    .become(json(new ast.LtNode( [
+                    .become(new ast.predicate.LtNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.numeric.NumberNode(4)
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'a < b').should
-                    .become(json(new ast.LtNode( [
+                    .become(new ast.predicate.LtNode( [
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse 2 <= 4', function() {
             return Promise.all([
                 run(parser, '2 <= 4').should
-                    .become(json(new ast.LteNode( [
+                    .become(new ast.predicate.LteNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.numeric.NumberNode(4)
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'a <= b').should
-                    .become(json(new ast.LteNode( [
+                    .become(new ast.predicate.LteNode( [
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse 2 >= 4', function() {
             return Promise.all([
                 run(parser, '2 >= 4').should
-                    .become(json(new ast.GteNode( [
+                    .become(new ast.predicate.GteNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.numeric.NumberNode(4)
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'a >= b').should
-                    .become(json(new ast.GteNode( [
+                    .become(new ast.predicate.GteNode( [
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse 2 > 4', function() {
             return Promise.all([
                 run(parser, '2 > 4').should
-                    .become(json(new ast.GtNode( [
+                    .become(new ast.predicate.GtNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.numeric.NumberNode(4)
-                    ]))),
+                    ]).serialize()),
                 run(parser, 'a > b').should
-                    .become(json(new ast.GtNode( [
+                    .become(new ast.predicate.GtNode( [
                         new ast.PathNode('a'),
                         new ast.PathNode('b')
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse 1 * 2 + 3 / 4 < 5 * 6', function() {
             return Promise.all([
                 run(parser, '1 * 2 + 3 / 4 < 5 * 6').should
-                    .become(json(
-                        new ast.LtNode([
-                            new ast.AdditionNode( [
-                                new ast.MultiplicationNode( [
+                    .become(
+                        new ast.predicate.LtNode([
+                            new ast.numeric.AdditionNode( [
+                                new ast.numeric.MultiplicationNode( [
                                     new ast.numeric.NumberNode(1),
                                     new ast.numeric.NumberNode(2)
                                 ]),
-                                new ast.DivisionNode( [
+                                new ast.numeric.DivisionNode( [
                                     new ast.numeric.NumberNode(3),
                                     new ast.numeric.NumberNode(4)
                                 ])
                             ]),
-                            new ast.MultiplicationNode( [
+                            new ast.numeric.MultiplicationNode( [
                                 new ast.numeric.NumberNode(5),
                                 new ast.numeric.NumberNode(6)
                             ])
-                        ])))
+                        ]).serialize())
             ]);
         });
         it('should reject invalid input', function() {
@@ -329,74 +330,75 @@ describe('Expression Parsers', function() {
         it('should parse level-5 input', function() {
             return Promise.all([
                 run(parser, 'not false').should
-                    .become(json(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))))
+                    .become(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))
+                           .serialize())
             ]);
         });
         it('should parse addition input', function() {
             return Promise.all([
                 run(parser, '2 + a').should
-                    .become(json(new ast.AdditionNode( [
+                    .become(new ast.numeric.AdditionNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.PathNode('a')
-                    ]))),
+                    ]).serialize()),
                 run(parser, '1 + 2 + 3').should
-                    .become(json(new ast.AdditionNode( [
+                    .become(new ast.numeric.AdditionNode( [
                         new ast.numeric.NumberNode(1),
-                        new ast.AdditionNode( [
+                        new ast.numeric.AdditionNode( [
                             new ast.numeric.NumberNode(2),
                             new ast.numeric.NumberNode(3)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse subtraction input', function() {
             return Promise.all([
                 run(parser, '2 - a').should
-                    .become(json(new ast.SubtractionNode( [
+                    .become(new ast.numeric.SubtractionNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.PathNode('a')
-                    ]))),
+                    ]).serialize()),
                 run(parser, '1 - 2 - 3').should
-                    .become(json(new ast.SubtractionNode( [
+                    .become(new ast.numeric.SubtractionNode( [
                         new ast.numeric.NumberNode(1),
-                        new ast.SubtractionNode( [
+                        new ast.numeric.SubtractionNode( [
                             new ast.numeric.NumberNode(2),
                             new ast.numeric.NumberNode(3)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse mixed input', function() {
             return Promise.all([
                 run(parser, '2 - 3 + 4').should
-                    .become(json(new ast.SubtractionNode( [
+                    .become(new ast.numeric.SubtractionNode( [
                         new ast.numeric.NumberNode(2),
-                        new ast.AdditionNode( [
+                        new ast.numeric.AdditionNode( [
                             new ast.numeric.NumberNode(3),
                             new ast.numeric.NumberNode(4)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse 1 * 2 + 3 / 4 - 5 * 6', function() {
             return Promise.all([
                 run(parser, '1 * 2 + 3 / 4 - 5 * 6').should
-                    .become(json(new ast.AdditionNode( [
-                        new ast.MultiplicationNode( [
+                    .become(new ast.numeric.AdditionNode( [
+                        new ast.numeric.MultiplicationNode( [
                             new ast.numeric.NumberNode(1),
                             new ast.numeric.NumberNode(2)
                         ]),
-                        new ast.SubtractionNode( [
-                            new ast.DivisionNode( [
+                        new ast.numeric.SubtractionNode( [
+                            new ast.numeric.DivisionNode( [
                                 new ast.numeric.NumberNode(3),
                                 new ast.numeric.NumberNode(4)
                             ]),
-                            new ast.MultiplicationNode( [
+                            new ast.numeric.MultiplicationNode( [
                                 new ast.numeric.NumberNode(5),
                                 new ast.numeric.NumberNode(6)
                             ])
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should reject invalid input', function() {
@@ -427,53 +429,54 @@ describe('Expression Parsers', function() {
         it('should parse level-6 input', function() {
             return Promise.all([
                 run(parser, 'not false').should
-                    .become(json(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))))
+                    .become(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))
+                           .serialize())
             ]);
         });
         it('should parse multiplication input', function() {
             return Promise.all([
                 run(parser, '2 * a').should
-                    .become(json(new ast.MultiplicationNode( [
+                    .become(new ast.numeric.MultiplicationNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.PathNode('a')
-                    ]))),
+                    ]).serialize()),
                 run(parser, '1 * 2 * 3').should
-                    .become(json(new ast.MultiplicationNode( [
+                    .become(new ast.numeric.MultiplicationNode( [
                         new ast.numeric.NumberNode(1),
-                        new ast.MultiplicationNode( [
+                        new ast.numeric.MultiplicationNode( [
                             new ast.numeric.NumberNode(2),
                             new ast.numeric.NumberNode(3)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse division input', function() {
             return Promise.all([
                 run(parser, '2 / a').should
-                    .become(json(new ast.DivisionNode( [
+                    .become(new ast.numeric.DivisionNode( [
                         new ast.numeric.NumberNode(2),
                         new ast.PathNode('a')
-                    ]))),
+                    ]).serialize()),
                 run(parser, '1 / 2 / 3').should
-                    .become(json(new ast.DivisionNode( [
+                    .become(new ast.numeric.DivisionNode( [
                         new ast.numeric.NumberNode(1),
-                        new ast.DivisionNode( [
+                        new ast.numeric.DivisionNode( [
                             new ast.numeric.NumberNode(2),
                             new ast.numeric.NumberNode(3)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should parse mixed input', function() {
             return Promise.all([
                 run(parser, '2 / 3 * 4').should
-                    .become(json(new ast.DivisionNode( [
+                    .become(new ast.numeric.DivisionNode( [
                         new ast.numeric.NumberNode(2),
-                        new ast.MultiplicationNode( [
+                        new ast.numeric.MultiplicationNode( [
                             new ast.numeric.NumberNode(3),
                             new ast.numeric.NumberNode(4)
                         ])
-                    ])))
+                    ]).serialize())
             ]);
         });
         it('should reject invalid input', function() {
@@ -503,20 +506,22 @@ describe('Expression Parsers', function() {
         var parser = exp.parseExp6;
         it('should parse level-7 input', function() {
             return Promise.all([
-                run(parser, 'true').should.become(json(new ast.predicate.BooleanNode(true)))
+                run(parser, 'true').should.become(new ast.predicate.BooleanNode(true)
+                                                  .serialize())
             ]);
         });
         it('should parse "not <predicate>"', function() {
             return Promise.all([
                 run(parser, 'not false').should
-                    .become(json(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))))
+                    .become(new ast.predicate.NotNode(new ast.predicate.BooleanNode(false))
+                            .serialize())
             ]);
         });
         it('should parse "not not <predicate>"', function() {
             return Promise.all([
                 run(parser, 'not not false').should
-                    .become(json(new ast.predicate.NotNode(new ast.predicate.NotNode(
-                        new ast.predicate.BooleanNode(false)))))
+                    .become(new ast.predicate.NotNode(new ast.predicate.NotNode(
+                        new ast.predicate.BooleanNode(false))).serialize())
             ]);
         });
         it('should reject invalid uses of not', function() {
@@ -539,42 +544,41 @@ describe('Expression Parsers', function() {
         var parser = exp.parseExp7;
         it('should parse constants', function() {
             return Promise.all([
-                run(parser, '0').should.become(json(new ast.numeric.NumberNode(0))),
-                run(parser, '42').should.become(json(new ast.numeric.NumberNode(42))),
-                run(parser, '3.14').should.become(json(new ast.numeric.NumberNode(3.14))),
-                run(parser, '"foobar"').should.become(json(
-                    new ast.StringNode('foobar'))),
-                run(parser, 'true').should.become(json(new ast.predicate.BooleanNode(true))),
-                run(parser, 'false').should.become(json(new ast.predicate.BooleanNode(false)))
+                run(parser, '0').should.become(new ast.numeric.NumberNode(0).serialize()),
+                run(parser, '42').should.become(new ast.numeric.NumberNode(42).serialize()),
+                run(parser, '3.14').should.become(new ast.numeric.NumberNode(3.14).serialize()),
+                run(parser, '"foobar"').should.become(new ast.StringNode('foobar').serialize()),
+                run(parser, 'true').should.become(new ast.predicate.BooleanNode(true).serialize()),
+                run(parser, 'false').should.become(new ast.predicate.BooleanNode(false).serialize())
             ]);
         });
         it('should parse count and size', function() {
             return Promise.all([
-                run(parser, 'size').should.become(json(new ast.SizeNode())),
+                run(parser, 'size').should.become(new ast.rules.SizeNode().serialize()),
                 run(parser, 'count a').should.become(
-                    json(new ast.CountNode(new ast.PathNode('a'))))
+                    new ast.numeric.CountNode(new ast.PathNode('a')).serialize())
             ]);
         });
         it('should parse parenthesized expressions', function() {
             return Promise.all([
-                run(parser, '(0)').should.become(json(new ast.numeric.NumberNode(0))),
-                run(parser, '(((42)))').should.become(json(new ast.numeric.NumberNode(42))),
-                run(parser, '(((a)))').should.become(json(new ast.PathNode('a')))
+                run(parser, '(0)').should.become(new ast.numeric.NumberNode(0).serialize()),
+                run(parser, '(((42)))').should.become(new ast.numeric.NumberNode(42).serialize()),
+                run(parser, '(((a)))').should.become(new ast.PathNode('a').serialize())
             ]);
         });
         it('should parse paths', function() {
             return Promise.all([
-                run(parser, 'a').should.become(json(new ast.PathNode('a'))),
+                run(parser, 'a').should.become(new ast.PathNode('a').serialize()),
                 run(parser, 'a.b.c').should.become(
-                    json(new ast.PathNode([ 'a', 'b', 'c' ]))),
+                    new ast.PathNode([ 'a', 'b', 'c' ]).serialize()),
                 run(parser, 'a.b.c exists').should.become(
-                    json(new ast.predicate.PathExistsNode(new ast.PathNode([ 'a', 'b', 'c' ])))),
+                    new ast.predicate.PathExistsNode(new ast.PathNode([ 'a', 'b', 'c' ])).serialize()),
                 run(parser, 'a.b.c must exist').should.become(
-                    json(new ast.predicate.PathExistsNode(new ast.PathNode([ 'a', 'b', 'c' ])))),
+                    new ast.predicate.PathExistsNode(new ast.PathNode([ 'a', 'b', 'c' ])).serialize()),
                 run(parser, 'b does not exist').should.become(
-                    json(new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))))),
+                    new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))).serialize()),
                 run(parser, 'b must not exist').should.become(
-                    json(new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b')))))
+                    new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))).serialize())
             ]);
         });
         it('should reject unbalanced parentheses', function() {
@@ -605,7 +609,7 @@ describe('Expression Parsers', function() {
             return Promise.all([
                 run(parser, 'not true').should.be.rejected
             ]);
-            }); */
+        });
     });
 });
 
