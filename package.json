@@ -1,7 +1,7 @@
 {
   "name": "reflective-lang-rules",
   "version": "0.0.1",
-  "description": "Parser and examples for the Reflective Platform Rule Language",
+  "description": "Parser and examples for the Reflective Rule Language",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive"
