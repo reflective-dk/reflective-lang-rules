@@ -1,0 +1,165 @@
+nodeType: pattern
+title:
+  nodeType: string
+  value: Henvendelsessteder
+description:
+  -
+    nodeType: string
+    value: 'Registreringsmønstret ”Henvendelsessteder” angiver, hvorledes Enheder kan relateres til egen eller andre Enheder, der er registreret med en række kontaktoplysninger som: Postadresse, Hjemmeside, Telefonnummer, EAN, etc. Mønstret anvendes af SAPA, KY og KSD i sammenhæng med fx brevfletning, hvor henvendelsesoplysninger fremgår af det brev, det sendes ud til borgere og virksomheder.'
+rules:
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En Enhed kan have nul eller flere adresseobjekter tilknyttet. (Bemærk: Ikke begrænsende regel).'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: boolean
+      value: true
+    implication:
+      nodeType: boolean
+      value: true
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'For hver adresse angives på relationen hvilken type adresse, der er tale om. Dette sker ved en henvisning til klassifikation hvor gældende adressetyper vedligeholdes. (Bemærk: I Reflective Platform vedligeholdes adressetyper direkte i datamodellen, som derved sikrer denne regels overholdelse).'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: boolean
+      value: true
+    implication:
+      nodeType: boolean
+      value: true
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En Enhed kan tilknyttes et eller flere henvendelsessteder (Funktioner af typen henvendelsessted). (Bemærk: Ikke begrænsende regel).'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: boolean
+      value: true
+    implication:
+      nodeType: boolean
+      value: true
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'Et henvendelsessted skal tilknyttes Funktionstypen ”Henvendelsessted” via relationen Funktion.Funktionstype. (Bemærk: Denne regel er altid overholdt. Et henvendelsessted er netop en Funktion med Funktionstypen ”Henvendelsessted”).'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: boolean
+      value: true
+    implication:
+      nodeType: boolean
+      value: true
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'Et henvendelsessted skal tilknyttes en eller flere KLE-klasser via relationen Funktion.Opgaver.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: Henvendelsessted
+    implication:
+      nodeType: pathExists
+      child:
+        nodeType: path
+        path:
+          - Opgaver
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En Enhed må ikke på samme tid tilknyttes flere henvendelsessteder, der relaterer sig til samme KLE-Klasse.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - TilknyttedeFunktioner
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: Henvendelsessted
+    implication:
+      nodeType: pathUnique
+      child:
+        nodeType: path
+        path:
+          - TilknyttedeFunktioner
+          - Opgaver
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'Et henvendelsessted skal tilknyttes én og kun én OrgEnhed, hvorfra adresseoplysningerne hentes.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: Henvendelsessted
+    implication:
+      nodeType: eq
+      left:
+        nodeType: count
+        path:
+          nodeType: path
+          path:
+            - TilknyttedeEnheder
+      right:
+        nodeType: number
+        value: 1
