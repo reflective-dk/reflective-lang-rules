@@ -1,0 +1,20 @@
+Pattern: IT-Anvendelse
+
+  Registreringsmønstret ”IT-Anvendelse” beskriver, hvorledes et givent IT-system
+  anvendes inden for en organisation. Det benyttes primært til at fremsøge hvilke
+  Enheder, der anvender IT-systemet i sin opgaveløsning og til at hente
+  adresseoplysninger til IT-systemer, som er en forudsætning for hop mellem
+  fagsystemer.
+
+Rule: For et givent IT-system, der anvendes inden for en organisation, er der
+  tilknyttet præcis én Funktion med Funktionstypen ”Systemrolle”.
+
+  When Funktionstype.Navn equals "Systemrolle"
+  Then count TilknyttedeItSystemer must equal 1
+
+Rule: Enhver Enhed, som anvender IT-systemet, tilknyttes Funktion af typen
+  ”Systemrolle”. Funktion (Systemrolle) kan relateres via relationen
+  Funktion.Opgaver til de klasser i KLE, som kommunen anvender det pågældende
+  IT-system til. (Bemærk: ikke begrænsende regel).
+
+  Always true

@@ -1,0 +1,85 @@
+{
+  "nodeType": "pattern",
+  "title": {
+    "nodeType": "string",
+    "value": "IT-Anvendelse"
+  },
+  "description": [
+    {
+      "nodeType": "string",
+      "value": "Registreringsmønstret ”IT-Anvendelse” beskriver, hvorledes et givent IT-system anvendes inden for en organisation. Det benyttes primært til at fremsøge hvilke Enheder, der anvender IT-systemet i sin opgaveløsning og til at hente adresseoplysninger til IT-systemer, som er en forudsætning for hop mellem fagsystemer."
+    }
+  ],
+  "rules": [
+    {
+      "nodeType": "rule",
+      "description": [
+        {
+          "nodeType": "string",
+          "value": "For et givent IT-system, der anvendes inden for en organisation, er der tilknyttet præcis én Funktion med Funktionstypen ”Systemrolle”."
+        }
+      ],
+      "partitioning": {
+        "nodeType": "fullSet"
+      },
+      "filter": {
+        "nodeType": "boolean",
+        "value": true
+      },
+      "condition": {
+        "nodeType": "eq",
+        "left": {
+          "nodeType": "path",
+          "path": [
+            "Funktionstype",
+            "Navn"
+          ]
+        },
+        "right": {
+          "nodeType": "string",
+          "value": "Systemrolle"
+        }
+      },
+      "implication": {
+        "nodeType": "eq",
+        "left": {
+          "nodeType": "count",
+          "path": {
+            "nodeType": "path",
+            "path": [
+              "TilknyttedeItSystemer"
+            ]
+          }
+        },
+        "right": {
+          "nodeType": "number",
+          "value": 1
+        }
+      }
+    },
+    {
+      "nodeType": "rule",
+      "description": [
+        {
+          "nodeType": "string",
+          "value": "Enhver Enhed, som anvender IT-systemet, tilknyttes Funktion af typen ”Systemrolle”. Funktion (Systemrolle) kan relateres via relationen Funktion.Opgaver til de klasser i KLE, som kommunen anvender det pågældende IT-system til. (Bemærk: ikke begrænsende regel)."
+        }
+      ],
+      "partitioning": {
+        "nodeType": "fullSet"
+      },
+      "filter": {
+        "nodeType": "boolean",
+        "value": true
+      },
+      "condition": {
+        "nodeType": "boolean",
+        "value": true
+      },
+      "implication": {
+        "nodeType": "boolean",
+        "value": true
+      }
+    }
+  ]
+}
