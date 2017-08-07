@@ -578,7 +578,11 @@ describe('Expression Parsers', function() {
                 run(parser, 'b does not exist').should.become(
                     new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))).serialize()),
                 run(parser, 'b must not exist').should.become(
-                    new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))).serialize())
+                    new ast.predicate.NotNode(new ast.predicate.PathExistsNode(new ast.PathNode('b'))).serialize()),
+                run(parser, 'b is unique').should.become(
+                    new ast.predicate.PathUniqueNode(new ast.PathNode('b')).serialize()),
+                run(parser, 'b must be unique').should.become(
+                    new ast.predicate.PathUniqueNode(new ast.PathNode('b')).serialize())
             ]);
         });
         it('should reject unbalanced parentheses', function() {
