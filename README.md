@@ -25,7 +25,7 @@ clean out the `generated` folder and reparse everything found under `examples`.
 
 ### KOMBIT-klar ###
 
-This example illustrates how the requirements posed by KOMBIT<sup>1</sup> can be
+This example illustrates how the requirements posed by KOMBIT\[1\] can be
 met using the _Reflective Rule Language_. The requirements were originally
 published in the form of five mandatory registration patterns
 (registreringsmønstre), and this example includes a `.pattern` file for each of
@@ -42,4 +42,4 @@ The original requiments (in Danish) can be found here:
 `examples/kombitklar/anvendelse-af-sts-organisation.pdf`
 
 ---
-<sup>1</sup> IT architects working on behalf of the Danish municipalities
+\[1\] IT architects working on behalf of the Danish municipalities
