@@ -31,11 +31,11 @@ published in the form of five mandatory registration patterns
 (registreringsmønstre), and this example includes a `.pattern` file for each of
 these:
 
-* administrativ-organisation.pattern
-* henvendelsessteder.pattern
-* it-anvendelse.pattern
-* organisatorisk-tilknytning.pattern
-* udbetalende-enheder.pattern
+* Administrativ Organisation
+* Henvendelsessteder
+* IT-Anvendelse
+* Organisatorisk Tilknytning
+* Udbetalende Enheder
 
 The original requiments (in Danish) can be found here:
 
