@@ -109,7 +109,7 @@
         },
         {
           "nodeType": "string",
-          "value": "Bemærk: Denne regel er faktisk en tautologi (altid opfyldt). En Enhed, der ikke har en Overordnet, er iht. definitionen ovenfor en \"rod\". Dermed vil enhver Enhed, der ikke er \"roden\", have en Overordnet."
+          "value": "Bemærk: Denne regel er altid overholdt. En Enhed, der ikke har en Overordnet, er iht. definitionen ovenfor en \"rod\". Dermed vil enhver Enhed, der ikke er \"roden\", have en Overordnet."
         }
       ],
       "partitioning": {

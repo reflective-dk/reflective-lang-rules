@@ -24,9 +24,9 @@ Rule: Der findes én og kun én Enhed, som ikke har en Overordnet relation
 
 Rule: Hvis en Enhed ikke er "roden" skal Enhed.Overordnet anvendes.
 
-  Bemærk: Denne regel er faktisk en tautologi (altid opfyldt). En Enhed, der ikke
-  har en Overordnet, er iht. definitionen ovenfor en "rod". Dermed vil enhver
-  Enhed, der ikke er "roden", have en Overordnet.
+  Bemærk: Denne regel er altid overholdt. En Enhed, der ikke har en Overordnet, er
+  iht. definitionen ovenfor en "rod". Dermed vil enhver Enhed, der ikke er "roden",
+  have en Overordnet.
 
   When Overordnet exists
   Then Overordnet must exist
