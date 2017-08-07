@@ -1,0 +1,118 @@
+nodeType: pattern
+title:
+  nodeType: string
+  value: 'Udbetalende Enheder'
+description:
+  -
+    nodeType: string
+    value: 'Registreringsmønstret ”Udbetalende Enheder” angiver, hvorledes Enheder kan relateres til hinanden, således at én enhed kan agere udbetalende enhed for en eller flere Enheder. Mønstret anvendes primært i sammenhæng med at fremfinde posterings- og konteringsoplysninger, som kommuner skal angive i forbindelse med (ud)betalinger.'
+  -
+    nodeType: string
+    value: 'Mønsteret anvendes af KY og KSD. Anvendersystemerne fremsøger mønstret ved at udsøge en Funktion med FunktionsTypen ”Udbetalende Enhed” og derefter de Enheder, der relaterer sig til denne funktion.'
+rules:
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'Der kan være tilknyttet én og kun én Enhed på en Funktion af typen ”Udbetalende Enhed”.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: 'Udbetalende Enhed'
+    implication:
+      nodeType: eq
+      left:
+        nodeType: count
+        path:
+          nodeType: path
+          path:
+            - TilknyttedeEnheder
+      right:
+        nodeType: number
+        value: 1
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En eller flere Enheder kan relatere sig til en Funktion af typen ”Udbetalende Enhed” (Denne regel er ikke en begrænsning).'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: boolean
+      value: true
+    implication:
+      nodeType: boolean
+      value: true
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'En Enhed, der har rollen som udbetalende enhed, skal relateres til et adresseobjekt, hvori identiteten på den tilsvarende LOS-enhed er angivet. LOS- enheden er nødvendig så længe udfasningen af monopolbrudsløsningerne pågår, men kan efterfølgende nedlægges.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - TilknyttedeFunktioner
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: 'Udbetalende Enhed'
+    implication:
+      nodeType: pathExists
+      child:
+        nodeType: path
+        path:
+          - TilknyttedeAdresser
+  -
+    nodeType: rule
+    description:
+      -
+        nodeType: string
+        value: 'Adresseobjektet, der indeholder oplysninger om den tilknyttede LOS-enhed, skal på attributten Adresse.Adressetekst ”afspejle LOS kaldenavn kort”.'
+    partitioning:
+      nodeType: fullSet
+    filter:
+      nodeType: boolean
+      value: true
+    condition:
+      nodeType: eq
+      left:
+        nodeType: path
+        path:
+          - TilknyttedeFunktioner
+          - Funktionstype
+          - Navn
+      right:
+        nodeType: string
+        value: 'Udbetalende Enhed'
+    implication:
+      nodeType: pathExists
+      child:
+        nodeType: path
+        path:
+          - TilknyttedeAdresser
+          - Adressetekst
