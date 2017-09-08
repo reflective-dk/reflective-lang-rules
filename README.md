@@ -6,7 +6,7 @@ DSL used to ensure the consistency of data stored in the Reflective Platform.
 ### In action ###
 
 ```
-git clone git@bitbucket.org:iteration2/reflective-lang-rules.git
+git clone git@github.com:reflective-dk/reflective-lang-rules.git
 cd reflective-lang-rules
 npm install
 npm test
