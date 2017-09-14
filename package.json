@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:iteration2/reflective-lang-rules.git"
+    "url": "git://github.com/reflective-dk/reflective-lang-rules.git"
   },
   "keywords": [
     "reflective",
@@ -20,7 +20,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "ast": "git@bitbucket.org:iteration2/reflective-lang-ast.git",
+    "ast": "git://github.com/reflective-dk/reflective-lang-ast.git",
     "bluebird": "^3.5.0"
   },
   "devDependencies": {
